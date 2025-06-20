@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  tempura
+//  grafisch
 //
 //  Created by jayac chhitu on 19/06/2025.
 //
