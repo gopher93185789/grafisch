@@ -11,6 +11,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack{
+    
             HStack (alignment: .center){
                 Image("rizz")
                     .resizable()
@@ -23,11 +24,14 @@ struct ContentView: View {
                         .font(.system(size: 20, weight: .bold))
                         .lineLimit(1)
                         .multilineTextAlignment(.leading)
+                        .foregroundStyle(Color.black)
                     
-                    Text("student").font(.system(size: 15, weight: .semibold))
+                    Text("student")
+                        .font(.system(size: 15, weight: .semibold))
                         .lineLimit(1)
                         .multilineTextAlignment(.leading)
                         .opacity(0.5)
+                        .foregroundStyle(Color.black)
                 }
                 Spacer()
                 
@@ -61,7 +65,7 @@ struct ContentView: View {
                                 .stroke(Color.black, lineWidth: 2).opacity(0.5)
                         )
                 }
-            }.padding(.horizontal, 10)
+            }.padding(.horizontal, 10).padding(.top, 20)
             
 
             Spacer()
