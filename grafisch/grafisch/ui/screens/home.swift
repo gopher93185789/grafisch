@@ -9,64 +9,65 @@ import SwiftUI
 
 
 struct ContentView: View {
-    let months = ["Apr", "May", "Jun"]
-
     var body: some View {
-        VStack(spacing: 30) {
-            Spacer().frame(height: 10)
-
-            VStack(alignment: .leading, spacing: 6) {
-                Text("Good morning, fnigga")
-                    .foregroundColor(.white)
-                    .font(.system(size: 30, weight: .semibold))
-                    .lineLimit(1)
-                    .multilineTextAlignment(.leading)
-
-                Text("You have 30 classes and 10 assignments due today")
-                    .foregroundColor(Color.white.opacity(0.6))
-                    .font(.system(size: 18, weight: .medium))
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 16)
-            // to get eah day attd check map location and from and to what time they is in scool location for and based on that incr/decr box op
-            VStack {
-                Text("Attendance")
-                    .foregroundColor(.white)
-                    .font(.system(size: 24, weight: .bold))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 16)
-
-                ScrollView(.horizontal, showsIndicators: true) {
-                    HStack(spacing: 30) {
-                        ForEach(months, id: \.self) { month in
-                            VStack(spacing: 20) {
-                                LazyHGrid(rows: Array(repeating: GridItem(.fixed(20)), count: 7), spacing: 5) {
-                                    ForEach(0..<7*4, id: \.self) { _ in
-                                        Rectangle()
-                                            .fill(Color.white.opacity(Double.random(in: 0.3...0.9)))
-                                            .frame(width: 20, height: 20)
-                                            .cornerRadius(5)
-                                    }
-                                }
-                                
-                                Text(month)
-                                    .foregroundColor(Color.white)
-                                    .font(.system(size: 20, weight: .bold))
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .cornerRadius(20)
+        VStack{
+            HStack (alignment: .center){
+                Image("rizz")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 50, height: 50)
+                    .clipShape(Circle())
                 
+                VStack(alignment: .leading){
+                    Text("Joe Biden")
+                        .font(.system(size: 20, weight: .bold))
+                        .lineLimit(1)
+                        .multilineTextAlignment(.leading)
+                    
+                    Text("student").font(.system(size: 15, weight: .semibold))
+                        .lineLimit(1)
+                        .multilineTextAlignment(.leading)
+                        .opacity(0.5)
                 }
-            }
-            .frame(maxWidth: .infinity, alignment: .topLeading)
-            .background(Color.black)
-        }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading).background(Color.black)
+                Spacer()
+                
+                Button(action: {
+                    print("calender clicker")
+                }){
+                    Image(systemName: "calendar")
+                        .font(.system(size: 20))
+                        .foregroundColor(.black)
+                        .frame(width: 50, height: 50)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(Color.black, lineWidth: 2).opacity(0.5)
+                        )
+                }
 
+
+                
+                
+                Button(action: {
+                    print("bell clicker")
+                }){
+                    Image(systemName: "bell")
+                        .font(.system(size: 20))
+                        .foregroundColor(.black)
+                        .frame(width: 50, height: 50)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(Color.black, lineWidth: 2).opacity(0.5)
+                        )
+                }
+            }.padding(.horizontal, 10)
             
+
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color("AppBackgroundColor").ignoresSafeArea())
     }
 }
 
