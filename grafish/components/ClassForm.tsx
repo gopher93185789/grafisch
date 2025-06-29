@@ -10,11 +10,15 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Dimensions,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useTheme } from '../contexts/ThemeContext';
 import { lightTheme, darkTheme } from '../constants/ThemeColors';
 import { ClassSchedule, DAYS_OF_WEEK, TIME_SLOTS, SUBJECT_COLORS } from '../types/schedule';
+import GradientView from './GradientView';
+
+const { height } = Dimensions.get('window');
 
 interface ClassFormProps {
   visible: boolean;
@@ -59,7 +63,6 @@ export default function ClassForm({
       setNotes(initialData.notes || '');
       setColor(initialData.color);
     } else {
-      // Set default values based on user role
       if (userRole === 'teacher') {
         setTeacher(userName);
       } else {
@@ -125,127 +128,176 @@ export default function ClassForm({
     },
     container: {
       backgroundColor: colors.background,
-      borderTopLeftRadius: 20,
-      borderTopRightRadius: 20,
-      padding: 20,
-      maxHeight: '90%',
+      borderTopLeftRadius: 28,
+      borderTopRightRadius: 28,
+      maxHeight: height * 0.9,
+      shadowColor: colors.shadowStrong,
+      shadowOffset: { width: 0, height: -8 },
+      shadowOpacity: 0.25,
+      shadowRadius: 24,
+      elevation: 16,
     },
     header: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 20,
+      padding: 24,
+      paddingBottom: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.borderSecondary,
     },
     title: {
-      fontSize: 24,
-      fontWeight: 'bold',
+      fontSize: 28,
+      fontWeight: '800',
       color: colors.text,
+      letterSpacing: -0.5,
     },
     closeButton: {
-      padding: 8,
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: colors.surface,
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
     },
     closeButtonText: {
-      fontSize: 18,
-      color: colors.primary,
+      fontSize: 20,
+      color: colors.textSecondary,
       fontWeight: '600',
     },
     form: {
-      gap: 16,
+      padding: 24,
+      gap: 20,
     },
     inputGroup: {
       gap: 8,
     },
     label: {
-      fontSize: 16,
-      fontWeight: '600',
+      fontSize: 17,
+      fontWeight: '700',
       color: colors.text,
+      marginBottom: 4,
+      letterSpacing: -0.3,
     },
     input: {
-      borderWidth: 1,
-      borderColor: colors.border,
-      borderRadius: 12,
+      backgroundColor: colors.surface,
+      borderRadius: 16,
       padding: 16,
       fontSize: 16,
       color: colors.text,
-      backgroundColor: colors.surface,
+      borderWidth: 1.5,
+      borderColor: colors.borderSecondary,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: 8,
+      elevation: 2,
     },
     pickerContainer: {
-      borderWidth: 1,
-      borderColor: colors.border,
-      borderRadius: 12,
       backgroundColor: colors.surface,
+      borderRadius: 16,
+      borderWidth: 1.5,
+      borderColor: colors.borderSecondary,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: 8,
+      elevation: 2,
+      overflow: 'hidden',
     },
     picker: {
       color: colors.text,
+      backgroundColor: 'transparent',
     },
     timeContainer: {
       flexDirection: 'row',
-      gap: 12,
+      gap: 16,
+      alignItems: 'center',
     },
-    timeInput: {
-      flex: 1,
-      borderWidth: 1,
-      borderColor: colors.border,
-      borderRadius: 12,
-      padding: 16,
+    timeLabel: {
       fontSize: 16,
-      color: colors.text,
-      backgroundColor: colors.surface,
+      color: colors.textSecondary,
+      fontWeight: '600',
     },
     colorContainer: {
       flexDirection: 'row',
       flexWrap: 'wrap',
-      gap: 8,
+      gap: 12,
+      marginTop: 8,
     },
     colorButton: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
+      width: 48,
+      height: 48,
+      borderRadius: 24,
       borderWidth: 3,
-      borderColor: colors.border,
+      borderColor: colors.borderSecondary,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
     },
     colorButtonSelected: {
       borderColor: colors.text,
+      shadowColor: colors.text,
+      shadowOpacity: 0.3,
     },
     textArea: {
-      borderWidth: 1,
-      borderColor: colors.border,
-      borderRadius: 12,
+      backgroundColor: colors.surface,
+      borderRadius: 16,
       padding: 16,
       fontSize: 16,
       color: colors.text,
-      backgroundColor: colors.surface,
-      height: 80,
+      borderWidth: 1.5,
+      borderColor: colors.borderSecondary,
+      height: 100,
       textAlignVertical: 'top',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: 8,
+      elevation: 2,
     },
     buttonContainer: {
       flexDirection: 'row',
-      gap: 12,
-      marginTop: 20,
+      gap: 16,
+      padding: 24,
+      paddingTop: 20,
     },
     button: {
       flex: 1,
-      padding: 16,
-      borderRadius: 12,
+      padding: 18,
+      borderRadius: 16,
       alignItems: 'center',
+      shadowColor: colors.shadowStrong,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.15,
+      shadowRadius: 8,
+      elevation: 4,
     },
     cancelButton: {
       backgroundColor: colors.surface,
-      borderWidth: 1,
+      borderWidth: 1.5,
       borderColor: colors.border,
     },
     submitButton: {
       backgroundColor: colors.primary,
     },
     buttonText: {
-      fontSize: 16,
-      fontWeight: '600',
+      fontSize: 17,
+      fontWeight: '700',
+      letterSpacing: -0.3,
     },
     cancelButtonText: {
       color: colors.text,
     },
     submitButtonText: {
-      color: '#FFFFFF',
+      color: colors.textInverse,
     },
   });
 
@@ -276,7 +328,7 @@ export default function ClassForm({
               <TextInput
                 style={styles.input}
                 placeholder="e.g., Mathematics, Physics"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={colors.textTertiary}
                 value={subject}
                 onChangeText={setSubject}
               />
@@ -287,7 +339,7 @@ export default function ClassForm({
               <TextInput
                 style={styles.input}
                 placeholder="Teacher's name"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={colors.textTertiary}
                 value={teacher}
                 onChangeText={setTeacher}
               />
@@ -298,7 +350,7 @@ export default function ClassForm({
               <TextInput
                 style={styles.input}
                 placeholder="Student's name"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={colors.textTertiary}
                 value={student}
                 onChangeText={setStudent}
               />
@@ -326,7 +378,7 @@ export default function ClassForm({
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Time</Text>
               <View style={styles.timeContainer}>
-                <View style={styles.pickerContainer}>
+                <View style={[styles.pickerContainer, { flex: 1 }]}>
                   <Picker
                     selectedValue={startTime}
                     onValueChange={setStartTime}
@@ -337,8 +389,8 @@ export default function ClassForm({
                     ))}
                   </Picker>
                 </View>
-                <Text style={[styles.label, { alignSelf: 'center' }]}>to</Text>
-                <View style={styles.pickerContainer}>
+                <Text style={styles.timeLabel}>to</Text>
+                <View style={[styles.pickerContainer, { flex: 1 }]}>
                   <Picker
                     selectedValue={endTime}
                     onValueChange={setEndTime}
@@ -357,7 +409,7 @@ export default function ClassForm({
               <TextInput
                 style={styles.input}
                 placeholder="e.g., Room 101, Lab A"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={colors.textTertiary}
                 value={room}
                 onChangeText={setRoom}
               />
@@ -385,7 +437,7 @@ export default function ClassForm({
               <TextInput
                 style={styles.textArea}
                 placeholder="Additional notes..."
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={colors.textTertiary}
                 value={notes}
                 onChangeText={setNotes}
                 multiline
@@ -397,11 +449,17 @@ export default function ClassForm({
             <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={handleClose}>
               <Text style={[styles.buttonText, styles.cancelButtonText]}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.submitButton]} onPress={handleSubmit}>
-              <Text style={[styles.buttonText, styles.submitButtonText]}>
-                {isEditing ? 'Update' : 'Add Class'}
-              </Text>
-            </TouchableOpacity>
+            <GradientView
+              colors={colors.primaryGradient}
+              style={[styles.button, styles.submitButton]}
+              borderRadius={16}
+            >
+              <TouchableOpacity onPress={handleSubmit} style={{ width: '100%', alignItems: 'center' }}>
+                <Text style={[styles.buttonText, styles.submitButtonText]}>
+                  {isEditing ? 'Update' : 'Add Class'}
+                </Text>
+              </TouchableOpacity>
+            </GradientView>
           </View>
         </KeyboardAvoidingView>
       </View>

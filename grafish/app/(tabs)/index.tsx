@@ -8,6 +8,7 @@ import {
   TextInput,
   Alert,
   RefreshControl,
+  Dimensions,
 } from 'react-native';
 import { useUser } from '../../contexts/UserContext';
 import { useSchedule } from '../../contexts/ScheduleContext';
@@ -16,6 +17,9 @@ import { lightTheme, darkTheme } from '../../constants/ThemeColors';
 import { DAYS_OF_WEEK, ClassSchedule } from '../../types/schedule';
 import ClassCard from '../../components/ClassCard';
 import ClassForm from '../../components/ClassForm';
+import GradientView from '../../components/GradientView';
+
+const { width } = Dimensions.get('window');
 
 export default function ScheduleScreen() {
   const [selectedDay, setSelectedDay] = useState<string>('monday');
@@ -79,7 +83,6 @@ export default function ScheduleScreen() {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    // The schedule context will automatically reload data
     setTimeout(() => setRefreshing(false), 1000);
   };
 
@@ -89,63 +92,85 @@ export default function ScheduleScreen() {
       backgroundColor: colors.background,
     },
     header: {
-      padding: 20,
-      paddingTop: 10,
+      paddingTop: 60,
+      paddingHorizontal: 20,
+      paddingBottom: 20,
       backgroundColor: colors.surface,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.border,
+      borderBottomLeftRadius: 24,
+      borderBottomRightRadius: 24,
+      shadowColor: colors.shadowStrong,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 12,
+      elevation: 8,
     },
     userInfo: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 16,
+      marginBottom: 20,
     },
     userText: {
-      fontSize: 16,
+      fontSize: 18,
       color: colors.textSecondary,
+      fontWeight: '600',
     },
     themeButton: {
-      padding: 8,
-      borderRadius: 8,
-      backgroundColor: colors.primary + '20',
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      backgroundColor: colors.primary + '15',
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
     },
     themeButtonText: {
-      color: colors.primary,
-      fontSize: 16,
+      fontSize: 20,
     },
     searchContainer: {
-      marginBottom: 16,
+      marginBottom: 20,
     },
     searchInput: {
       backgroundColor: colors.card,
-      borderRadius: 12,
-      padding: 12,
+      borderRadius: 16,
+      padding: 16,
       fontSize: 16,
       color: colors.text,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.borderSecondary,
+      shadowColor: colors.shadow,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.05,
+      shadowRadius: 8,
+      elevation: 2,
     },
     dayTabs: {
       flexDirection: 'row',
-      marginBottom: 16,
+      marginBottom: 8,
+      paddingHorizontal: 4,
     },
     dayTab: {
       flex: 1,
-      paddingVertical: 12,
+      paddingVertical: 14,
       paddingHorizontal: 8,
       alignItems: 'center',
-      borderBottomWidth: 2,
+      borderRadius: 16,
+      marginHorizontal: 2,
     },
     dayTabActive: {
-      borderBottomColor: colors.primary,
+      backgroundColor: colors.primary + '15',
     },
     dayTabInactive: {
-      borderBottomColor: colors.border,
+      backgroundColor: 'transparent',
     },
     dayTabText: {
-      fontSize: 14,
+      fontSize: 15,
       fontWeight: '600',
+      letterSpacing: -0.2,
     },
     dayTabTextActive: {
       color: colors.primary,
@@ -163,37 +188,53 @@ export default function ScheduleScreen() {
       alignItems: 'center',
       paddingHorizontal: 40,
     },
+    emptyStateIcon: {
+      fontSize: 64,
+      marginBottom: 20,
+      opacity: 0.5,
+    },
     emptyStateText: {
       fontSize: 18,
       color: colors.textSecondary,
       textAlign: 'center',
-      marginBottom: 20,
+      marginBottom: 8,
+      fontWeight: '600',
+    },
+    emptyStateSubtext: {
+      fontSize: 16,
+      color: colors.textTertiary,
+      textAlign: 'center',
+      lineHeight: 22,
     },
     addButton: {
       position: 'absolute',
       bottom: 30,
       right: 30,
-      width: 56,
-      height: 56,
-      borderRadius: 28,
-      backgroundColor: colors.primary,
+      width: 60,
+      height: 60,
+      borderRadius: 30,
       justifyContent: 'center',
       alignItems: 'center',
-      shadowColor: colors.shadow,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.3,
-      shadowRadius: 8,
-      elevation: 8,
+      shadowColor: colors.shadowStrong,
+      shadowOffset: { width: 0, height: 6 },
+      shadowOpacity: 0.25,
+      shadowRadius: 16,
+      elevation: 12,
     },
     addButtonText: {
-      color: '#FFFFFF',
-      fontSize: 24,
+      color: colors.textInverse,
+      fontSize: 28,
       fontWeight: 'bold',
     },
     classCount: {
-      fontSize: 14,
+      fontSize: 16,
       color: colors.textSecondary,
-      marginBottom: 16,
+      marginBottom: 20,
+      fontWeight: '600',
+    },
+    classCountNumber: {
+      color: colors.primary,
+      fontWeight: '700',
     },
   });
 
@@ -201,9 +242,8 @@ export default function ScheduleScreen() {
     return (
       <View style={styles.container}>
         <View style={styles.emptyState}>
-          <Text style={styles.emptyStateText}>
-            Please complete the setup to continue
-          </Text>
+          <Text style={styles.emptyStateIcon}>📚</Text>
+          <Text style={styles.emptyStateText}>Please complete the setup to continue</Text>
         </View>
       </View>
     );
@@ -211,10 +251,14 @@ export default function ScheduleScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <GradientView
+        colors={colors.surfaceGradient}
+        style={styles.header}
+        borderRadius={24}
+      >
         <View style={styles.userInfo}>
           <Text style={styles.userText}>
-            Welcome, {user.name} ({user.role})
+            Welcome back, {user.name} 👋
           </Text>
           <TouchableOpacity style={styles.themeButton} onPress={toggleTheme}>
             <Text style={styles.themeButtonText}>
@@ -227,7 +271,7 @@ export default function ScheduleScreen() {
           <TextInput
             style={styles.searchInput}
             placeholder="Search classes..."
-            placeholderTextColor={colors.textSecondary}
+            placeholderTextColor={colors.textTertiary}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
@@ -256,25 +300,39 @@ export default function ScheduleScreen() {
             </TouchableOpacity>
           ))}
         </View>
-      </View>
+      </GradientView>
 
       <View style={styles.content}>
         <Text style={styles.classCount}>
-          {filteredClasses.length} class{filteredClasses.length !== 1 ? 'es' : ''} on{' '}
+          <Text style={styles.classCountNumber}>{filteredClasses.length}</Text> class{filteredClasses.length !== 1 ? 'es' : ''} on{' '}
           {selectedDay.charAt(0).toUpperCase() + selectedDay.slice(1)}
         </Text>
 
         {filteredClasses.length === 0 ? (
           <View style={styles.emptyState}>
+            <Text style={styles.emptyStateIcon}>
+              {searchQuery.trim() ? '🔍' : '📅'}
+            </Text>
             <Text style={styles.emptyStateText}>
               {searchQuery.trim()
-                ? 'No classes found matching your search'
+                ? 'No classes found'
                 : `No classes scheduled for ${selectedDay.charAt(0).toUpperCase() + selectedDay.slice(1)}`}
             </Text>
+            <Text style={styles.emptyStateSubtext}>
+              {searchQuery.trim()
+                ? 'Try adjusting your search terms'
+                : 'Tap the + button to add your first class'}
+            </Text>
             {!searchQuery.trim() && (
-              <TouchableOpacity style={styles.addButton} onPress={handleAddClass}>
-                <Text style={styles.addButtonText}>+</Text>
-              </TouchableOpacity>
+              <GradientView
+                colors={colors.primaryGradient}
+                style={styles.addButton}
+                borderRadius={30}
+              >
+                <TouchableOpacity onPress={handleAddClass}>
+                  <Text style={styles.addButtonText}>+</Text>
+                </TouchableOpacity>
+              </GradientView>
             )}
           </View>
         ) : (
@@ -303,9 +361,15 @@ export default function ScheduleScreen() {
       </View>
 
       {filteredClasses.length > 0 && (
-        <TouchableOpacity style={styles.addButton} onPress={handleAddClass}>
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
+        <GradientView
+          colors={colors.primaryGradient}
+          style={styles.addButton}
+          borderRadius={30}
+        >
+          <TouchableOpacity onPress={handleAddClass}>
+            <Text style={styles.addButtonText}>+</Text>
+          </TouchableOpacity>
+        </GradientView>
       )}
 
       <ClassForm

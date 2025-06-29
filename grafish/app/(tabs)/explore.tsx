@@ -8,6 +8,7 @@ import {
   ScrollView,
   Share,
   Platform,
+  Dimensions,
 } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
@@ -16,6 +17,9 @@ import { useSchedule } from '../../contexts/ScheduleContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { lightTheme, darkTheme } from '../../constants/ThemeColors';
 import { storageUtils } from '../../utils/storage';
+import GradientView from '../../components/GradientView';
+
+const { width } = Dimensions.get('window');
 
 export default function SettingsScreen() {
   const [isExporting, setIsExporting] = useState(false);
@@ -34,7 +38,6 @@ export default function SettingsScreen() {
       const jsonString = JSON.stringify(data, null, 2);
       
       if (Platform.OS === 'web') {
-        // For web, create a download link
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -43,7 +46,6 @@ export default function SettingsScreen() {
         link.click();
         URL.revokeObjectURL(url);
       } else {
-        // For mobile, save to file and share
         const fileName = `rooster-schedule-${new Date().toISOString().split('T')[0]}.json`;
         const fileUri = `${FileSystem.documentDirectory}${fileName}`;
         
@@ -78,7 +80,6 @@ export default function SettingsScreen() {
           onPress: async () => {
             setIsImporting(true);
             try {
-              // For now, we'll show a placeholder since file picking requires additional setup
               Alert.alert(
                 'Import Feature',
                 'File import requires additional setup. For now, you can manually copy the JSON data and paste it in the app settings.',
@@ -137,53 +138,87 @@ export default function SettingsScreen() {
     },
     content: {
       padding: 20,
+      paddingTop: 60,
+    },
+    header: {
+      alignItems: 'center',
+      marginBottom: 40,
+    },
+    headerIcon: {
+      fontSize: 48,
+      marginBottom: 16,
+    },
+    headerTitle: {
+      fontSize: 32,
+      fontWeight: '800',
+      color: colors.text,
+      marginBottom: 8,
+      letterSpacing: -0.5,
+    },
+    headerSubtitle: {
+      fontSize: 18,
+      color: colors.textSecondary,
+      textAlign: 'center',
+      lineHeight: 24,
     },
     section: {
       marginBottom: 32,
     },
     sectionTitle: {
-      fontSize: 20,
-      fontWeight: 'bold',
+      fontSize: 24,
+      fontWeight: '800',
       color: colors.text,
       marginBottom: 16,
+      letterSpacing: -0.3,
     },
     card: {
       backgroundColor: colors.card,
-      borderRadius: 12,
-      padding: 16,
+      borderRadius: 20,
+      padding: 20,
       marginBottom: 12,
+      shadowColor: colors.shadowStrong,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 12,
+      elevation: 6,
       borderWidth: 1,
-      borderColor: colors.border,
+      borderColor: colors.borderSecondary,
     },
     cardTitle: {
-      fontSize: 16,
-      fontWeight: '600',
+      fontSize: 18,
+      fontWeight: '700',
       color: colors.text,
-      marginBottom: 4,
+      marginBottom: 6,
+      letterSpacing: -0.3,
     },
     cardSubtitle: {
-      fontSize: 14,
+      fontSize: 15,
       color: colors.textSecondary,
-      marginBottom: 12,
+      marginBottom: 16,
+      lineHeight: 20,
     },
     button: {
-      backgroundColor: colors.primary,
-      padding: 12,
-      borderRadius: 8,
+      borderRadius: 16,
+      padding: 16,
       alignItems: 'center',
       marginTop: 8,
+      shadowColor: colors.shadowStrong,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.15,
+      shadowRadius: 8,
+      elevation: 4,
     },
     buttonText: {
-      color: '#FFFFFF',
-      fontSize: 14,
-      fontWeight: '600',
+      fontSize: 16,
+      fontWeight: '700',
+      letterSpacing: -0.3,
     },
     buttonDisabled: {
-      backgroundColor: colors.disabled,
+      opacity: 0.6,
     },
     secondaryButton: {
       backgroundColor: colors.surface,
-      borderWidth: 1,
+      borderWidth: 1.5,
       borderColor: colors.border,
     },
     secondaryButtonText: {
@@ -193,35 +228,57 @@ export default function SettingsScreen() {
       backgroundColor: colors.error,
     },
     dangerButtonText: {
-      color: '#FFFFFF',
+      color: colors.textInverse,
     },
     infoRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      marginBottom: 8,
+      marginBottom: 12,
     },
     infoLabel: {
-      fontSize: 14,
+      fontSize: 16,
       color: colors.textSecondary,
+      fontWeight: '500',
     },
     infoValue: {
-      fontSize: 14,
+      fontSize: 16,
       color: colors.text,
-      fontWeight: '600',
+      fontWeight: '700',
     },
     themeToggle: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: 8,
+      paddingVertical: 12,
     },
     themeText: {
-      fontSize: 16,
+      fontSize: 18,
       color: colors.text,
+      fontWeight: '600',
     },
     themeIcon: {
-      fontSize: 20,
+      fontSize: 24,
+    },
+    statsContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      marginTop: 16,
+    },
+    statItem: {
+      alignItems: 'center',
+    },
+    statNumber: {
+      fontSize: 24,
+      fontWeight: '800',
+      color: colors.primary,
+      letterSpacing: -0.5,
+    },
+    statLabel: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      marginTop: 4,
+      fontWeight: '500',
     },
   });
 
@@ -238,6 +295,15 @@ export default function SettingsScreen() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.content}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.headerIcon}>⚙️</Text>
+          <Text style={styles.headerTitle}>Settings</Text>
+          <Text style={styles.headerSubtitle}>
+            Manage your app preferences and data
+          </Text>
+        </View>
+
         {/* User Information */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>User Information</Text>
@@ -252,9 +318,23 @@ export default function SettingsScreen() {
                 {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
               </Text>
             </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Total Classes:</Text>
-              <Text style={styles.infoValue}>{classes.length}</Text>
+            <View style={styles.statsContainer}>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{classes.length}</Text>
+                <Text style={styles.statLabel}>Classes</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>
+                  {new Set(classes.map(c => c.day)).size}
+                </Text>
+                <Text style={styles.statLabel}>Days</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>
+                  {new Set(classes.map(c => c.subject)).size}
+                </Text>
+                <Text style={styles.statLabel}>Subjects</Text>
+              </View>
             </View>
           </View>
         </View>
@@ -281,17 +361,23 @@ export default function SettingsScreen() {
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Export Schedule</Text>
             <Text style={styles.cardSubtitle}>
-              Save your schedule data as a JSON file
+              Save your schedule data as a JSON file for backup
             </Text>
-            <TouchableOpacity
-              style={[styles.button, isExporting && styles.buttonDisabled]}
-              onPress={handleExport}
-              disabled={isExporting}
+            <GradientView
+              colors={isExporting ? [colors.disabled, colors.disabled] : colors.primaryGradient}
+              style={[styles.button, isExporting && styles.buttonDisabled] as any}
+              borderRadius={16}
             >
-              <Text style={styles.buttonText}>
-                {isExporting ? 'Exporting...' : 'Export Data'}
-              </Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleExport}
+                disabled={isExporting}
+                style={{ width: '100%', alignItems: 'center' }}
+              >
+                <Text style={[styles.buttonText, { color: colors.textInverse }]}>
+                  {isExporting ? 'Exporting...' : 'Export Data'}
+                </Text>
+              </TouchableOpacity>
+            </GradientView>
           </View>
 
           <View style={styles.card}>
@@ -313,7 +399,7 @@ export default function SettingsScreen() {
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Share Schedule</Text>
             <Text style={styles.cardSubtitle}>
-              Share your schedule with others
+              Share your schedule with others via message or social media
             </Text>
             <TouchableOpacity style={[styles.button, styles.secondaryButton]} onPress={handleShare}>
               <Text style={[styles.buttonText, styles.secondaryButtonText]}>Share</Text>
@@ -327,7 +413,7 @@ export default function SettingsScreen() {
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Clear All Data</Text>
             <Text style={styles.cardSubtitle}>
-              Permanently delete all schedule data and reset the app
+              Permanently delete all schedule data and reset the app. This action cannot be undone.
             </Text>
             <TouchableOpacity style={[styles.button, styles.dangerButton]} onPress={handleClearData}>
               <Text style={[styles.buttonText, styles.dangerButtonText]}>Clear All Data</Text>
@@ -346,6 +432,12 @@ export default function SettingsScreen() {
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Platform:</Text>
               <Text style={styles.infoValue}>{Platform.OS}</Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Theme:</Text>
+              <Text style={styles.infoValue}>
+                {isDark ? 'Dark' : 'Light'}
+              </Text>
             </View>
           </View>
         </View>
